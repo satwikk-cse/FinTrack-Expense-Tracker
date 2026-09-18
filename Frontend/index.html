@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FinTrack Lite - Modern, simple personal expense tracking web application for students and hostel residents.">
+    <title>FinTrack Lite — Smart Student Expense Tracker</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background glow elements -->
+    <div class="glow-orb glow-orb-1" aria-hidden="true"></div>
+    <div class="glow-orb glow-orb-2" aria-hidden="true"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="brand-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <div class="brand-title-wrap">
+                        <h1 class="brand-title">FinTrack <span class="brand-badge">Lite</span></h1>
+                    </div>
+                    <p class="brand-subtitle">Student & Hostel Expense Manager</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="current-date-badge" id="currentDateBadge">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span id="headerDateText">Today</span>
+                </div>
+                <button type="button" class="btn-secondary btn-sm" id="resetDataBtn" title="Reset to initial sample data">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span>Reset Data</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- KPI Metrics Grid -->
+        <section class="metrics-grid" aria-label="Spending Summary">
+            <!-- Total Spending Card -->
+            <div class="metric-card metric-primary">
+                <div class="metric-header">
+                    <span class="metric-label">Total Spent</span>
+                    <div class="metric-icon-wrap icon-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value" id="totalSpendingAmount">₹0</div>
+                <div class="metric-footer">
+                    <span class="metric-trend" id="spendingCountSummary">0 recorded expenses</span>
+                </div>
+            </div>
+
+            <!-- Today's Spending Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-label">Spent Today</span>
+                    <div class="metric-icon-wrap icon-emerald">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value" id="todaySpendingAmount">₹0</div>
+                <div class="metric-footer">
+                    <span class="metric-subtext" id="todayCountText">0 transactions today</span>
+                </div>
+            </div>
+
+            <!-- Top Category Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-label">Top Category</span>
+                    <div class="metric-icon-wrap icon-violet">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+                            <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value metric-category-value" id="topCategoryName">—</div>
+                <div class="metric-footer">
+                    <span class="metric-subtext" id="topCategoryAmount">₹0 spent</span>
+                </div>
+            </div>
+
+            <!-- Average per Expense Card -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <span class="metric-label">Avg. / Expense</span>
+                    <div class="metric-icon-wrap icon-cyan">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value" id="averageSpendingAmount">₹0</div>
+                <div class="metric-footer">
+                    <span class="metric-subtext">Per transaction avg</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Add Section for Students -->
+        <section class="quick-add-section" aria-label="Quick Add Shortcuts">
+            <span class="quick-add-title">⚡ Quick Add:</span>
+            <div class="quick-add-chips">
+                <button type="button" class="chip-btn" data-category="Food" data-desc="Chai & Snacks" data-amount="30">
+                    <span class="chip-emoji">☕</span> Chai & Snacks (₹30)
+                </button>
+                <button type="button" class="chip-btn" data-category="Food" data-desc="Hostel Mess / Lunch" data-amount="120">
+                    <span class="chip-emoji">🍛</span> Mess / Lunch (₹120)
+                </button>
+                <button type="button" class="chip-btn" data-category="Travel" data-desc="Auto / Metro Ride" data-amount="50">
+                    <span class="chip-emoji">🛺</span> Auto / Metro (₹50)
+                </button>
+                <button type="button" class="chip-btn" data-category="Recharge" data-desc="Mobile Recharge" data-amount="299">
+                    <span class="chip-emoji">📱</span> Mobile Recharge (₹299)
+                </button>
+                <button type="button" class="chip-btn" data-category="Education" data-desc="Notebooks & Stationery" data-amount="150">
+                    <span class="chip-emoji">📚</span> Stationery (₹150)
+                </button>
+            </div>
+        </section>
+
+        <!-- Main Workspace Layout: Form + Category on left, List & Filters on right -->
+        <main class="dashboard-grid">
+            <!-- Left Column: Add Expense Form & Category Breakdown -->
+            <div class="dashboard-left-col">
+                <!-- Add Expense Card -->
+                <section class="panel-card form-panel" aria-labelledby="formTitle">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <h2 id="formTitle" class="panel-title">Add New Expense</h2>
+                            <p class="panel-subtitle">Log spending with instant local sync</p>
+                        </div>
+                    </div>
+
+                    <form id="expenseForm" class="expense-form" novalidate>
+                        <!-- Amount Input -->
+                        <div class="form-group">
+                            <label for="expenseAmount" class="form-label">
+                                Amount <span class="required-star">*</span>
+                            </label>
+                            <div class="input-with-affix">
+                                <span class="input-prefix">₹</span>
+                                <input 
+                                    type="number" 
+                                    id="expenseAmount" 
+                                    name="amount" 
+                                    class="form-input form-input-lg" 
+                                    placeholder="0.00" 
+                                    step="any" 
+                                    min="1" 
+                                    required
+                                >
+                            </div>
+                            <span class="field-error-msg" id="amountError">Please enter a valid amount greater than 0</span>
+                        </div>
+
+                        <!-- Description Input -->
+                        <div class="form-group">
+                            <label for="expenseDesc" class="form-label">
+                                Description <span class="required-star">*</span>
+                            </label>
+                            <div class="input-with-icon">
+                                <svg class="field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="expenseDesc" 
+                                    name="description" 
+                                    class="form-input" 
+                                    placeholder="e.g., Canteen Thali, Metro card" 
+                                    maxlength="60" 
+                                    required
+                                >
+                            </div>
+                            <span class="field-error-msg" id="descError">Please enter what this expense was for</span>
+                        </div>
+
+                        <!-- Two-Column row for Category and Date -->
+                        <div class="form-row">
+                            <!-- Category Select -->
+                            <div class="form-group">
+                                <label for="expenseCategory" class="form-label">
+                                    Category <span class="required-star">*</span>
+                                </label>
+                                <div class="select-wrapper">
+                                    <select id="expenseCategory" name="category" class="form-select" required>
+                                        <option value="Food" selected>🍔 Food</option>
+                                        <option value="Travel">🚇 Travel</option>
+                                        <option value="Shopping">🛍️ Shopping</option>
+                                        <option value="Education">🎓 Education</option>
+                                        <option value="Recharge">⚡ Recharge</option>
+                                        <option value="Entertainment">🎮 Entertainment</option>
+                                        <option value="Other">📦 Other</option>
+                                    </select>
+                                    <svg class="select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- Date Input -->
+                            <div class="form-group">
+                                <label for="expenseDate" class="form-label">
+                                    Date <span class="required-star">*</span>
+                                </label>
+                                <input 
+                                    type="date" 
+                                    id="expenseDate" 
+                                    name="date" 
+                                    class="form-input" 
+                                    required
+                                >
+                                <span class="field-error-msg" id="dateError">Please select a valid date</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-primary btn-block" id="submitExpenseBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Add Expense</span>
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Category Breakdown Section -->
+                <section class="panel-card breakdown-panel" aria-labelledby="breakdownTitle">
+                    <div class="panel-header">
+                        <div class="panel-title-group">
+                            <h2 id="breakdownTitle" class="panel-title">Category Breakdown</h2>
+                            <p class="panel-subtitle">Distribution across spending areas</p>
+                        </div>
+                    </div>
+
+                    <div class="category-bars-list" id="categoryBreakdownList">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Column: Expense History, Filters & Search -->
+            <div class="dashboard-right-col">
+                <section class="panel-card history-panel" aria-labelledby="historyTitle">
+                    <!-- History Controls Header -->
+                    <div class="history-header">
+                        <div class="history-title-wrap">
+                            <h2 id="historyTitle" class="panel-title">Recent Transactions</h2>
+                            <span class="count-badge" id="transactionBadge">0 items</span>
+                        </div>
+
+                        <!-- Filter Controls Bar -->
+                        <div class="filters-bar">
+                            <!-- Search -->
+                            <div class="search-input-wrap">
+                                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input 
+                                    type="text" 
+                                    id="searchInput" 
+                                    class="search-input" 
+                                    placeholder="Search description..."
+                                    autocomplete="off"
+                                >
+                                <button type="button" class="clear-search-btn" id="clearSearchBtn" aria-label="Clear search" style="display: none;">
+                                    &times;
+                                </button>
+                            </div>
+
+                            <!-- Filter by Category -->
+                            <div class="filter-select-wrap">
+                                <select id="filterCategory" class="filter-select">
+                                    <option value="ALL">All Categories</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Travel">Travel</option>
+                                    <option value="Shopping">Shopping</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Recharge">Recharge</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Sort Options -->
+                            <div class="filter-select-wrap">
+                                <select id="sortBy" class="filter-select">
+                                    <option value="date-desc">Newest First</option>
+                                    <option value="date-asc">Oldest First</option>
+                                    <option value="amount-desc">Highest Amount</option>
+                                    <option value="amount-asc">Lowest Amount</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expense List Container -->
+                    <div class="expense-list-container">
+                        <ul class="expense-list" id="expenseList" aria-live="polite">
+                            <!-- Populated dynamically via JS -->
+                        </ul>
+
+                        <!-- Empty State UI -->
+                        <div class="empty-state" id="emptyState" style="display: none;">
+                            <div class="empty-icon-wrap">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 12h8"></path>
+                                </svg>
+                            </div>
+                            <h3 class="empty-title" id="emptyStateTitle">No Expenses Found</h3>
+                            <p class="empty-text" id="emptyStateText">Add your first expense or try adjusting your search filters.</p>
+                        </div>
+                    </div>
+
+                    <!-- History Footer Summary -->
+                    <div class="history-footer">
+                        <span id="showingResultsText">Showing all transactions</span>
+                        <button type="button" class="btn-text-danger" id="clearAllBtn" title="Remove all expenses">
+                            Clear All Expenses
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification Component -->
+    <div class="toast-container" id="toastContainer" aria-live="assertive" aria-atomic="true"></div>
+
+    <!-- Confirmation Modal Dialog -->
+    <dialog class="app-dialog" id="confirmDialog">
+        <div class="dialog-content">
+            <div class="dialog-icon-wrap">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
+            <h3 class="dialog-title" id="dialogTitle">Are you sure?</h3>
+            <p class="dialog-desc" id="dialogDesc">This action cannot be undone.</p>
+            <div class="dialog-actions">
+                <button type="button" class="btn-secondary" id="dialogCancelBtn">Cancel</button>
+                <button type="button" class="btn-danger" id="dialogConfirmBtn">Confirm Delete</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- JavaScript Application Logic -->
+    <script src="script.js"></script>
+</body>
+
+</html>
